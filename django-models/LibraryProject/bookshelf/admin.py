@@ -26,10 +26,4 @@ class BookAdmin(admin.ModelAdmin):
     
     # Fields to display in the detail/edit form
     fields = ('title', 'author', 'publication_year')
-    
-    # Optional: Group fields in the detail view for better organization
-    fieldsets = (
-        ('Book Information', {
-            'fields': ('title', 'author', 'publication_year')
-        }),
-    )
+
