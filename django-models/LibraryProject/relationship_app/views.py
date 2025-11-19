@@ -1,6 +1,5 @@
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 
@@ -33,19 +32,6 @@ class LibraryDetailView(DetailView):
             self.object.books.select_related("author").all()
         )
         return context
-
-
-# Authentication Views
-class CustomLoginView(LoginView):
-    """User login view using Django's built-in LoginView."""
-    template_name = 'relationship_app/login.html'
-    redirect_authenticated_user = True
-
-
-class CustomLogoutView(LogoutView):
-    """User logout view using Django's built-in LogoutView."""
-    template_name = 'relationship_app/logout.html'
-    next_page = None  # Show template instead of redirecting
 
 
 def register(request):
