@@ -23,9 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sdpk7_*zsl7_)p+46j25x29#yk$n)e@m61v50^f+fakrrq95wt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# Set DEBUG to False in production for security
+# In production, set this via environment variable: DEBUG = os.getenv('DEBUG', 'False') == 'True'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# In production, set this to your domain: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 
 
 # Application definition
@@ -45,10 +48,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # CSRF protection enabled
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'bookshelf.middleware.CSPMiddleware',  # Custom CSP middleware for XSS protection
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -132,3 +136,51 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ============================================================================
+# SECURITY SETTINGS
+# ============================================================================
+# These settings enhance application security by protecting against common
+# vulnerabilities like XSS, CSRF, and clickjacking attacks.
+
+# XSS Protection: Enable browser's XSS filter
+# This header tells browsers to enable their built-in XSS protection
+SECURE_BROWSER_XSS_FILTER = True
+
+# Content Type Protection: Prevent MIME type sniffing
+# Prevents browsers from trying to guess content types, reducing XSS risks
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Frame Options: Prevent clickjacking attacks
+# Options: 'DENY' (no framing), 'SAMEORIGIN' (same origin only), or None
+X_FRAME_OPTIONS = 'DENY'
+
+# Cookie Security Settings
+# In production with HTTPS, set these to True to ensure cookies are only
+# sent over secure connections
+# Note: Set to False in development if not using HTTPS
+CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+
+# CSRF Cookie Settings
+CSRF_COOKIE_HTTPONLY = True  # Prevents JavaScript access to CSRF cookie
+SESSION_COOKIE_HTTPONLY = True  # Prevents JavaScript access to session cookie
+
+# Content Security Policy (CSP)
+# CSP helps prevent XSS attacks by specifying which domains can load resources
+# This is a basic CSP - adjust based on your application's needs
+# For production, use django-csp package for more advanced CSP configuration
+SECURE_CSP_DEFAULT_SRC = "'self'"
+SECURE_CSP_SCRIPT_SRC = "'self'"
+SECURE_CSP_STYLE_SRC = "'self' 'unsafe-inline'"  # 'unsafe-inline' needed for Django admin
+SECURE_CSP_IMG_SRC = "'self' data:"
+SECURE_CSP_FONT_SRC = "'self'"
+
+# Additional Security Headers
+# HSTS (HTTP Strict Transport Security) - only enable in production with HTTPS
+# SECURE_HSTS_SECONDS = 31536000  # 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+# SSL Redirect - only enable in production
+# SECURE_SSL_REDIRECT = True

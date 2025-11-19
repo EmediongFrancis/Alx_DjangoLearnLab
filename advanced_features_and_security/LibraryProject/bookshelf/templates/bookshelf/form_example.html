@@ -3,32 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ action }} Book</title>
+    <title>Secure Form Example</title>
 </head>
 <body>
-    <h1>{{ action }} Book</h1>
+    <h1>Secure Form Example</h1>
+    <p>This form demonstrates security best practices:</p>
+    <ul>
+        <li>CSRF token protection</li>
+        <li>Django form validation</li>
+        <li>Input sanitization</li>
+        <li>XSS protection through auto-escaping</li>
+    </ul>
     
-    <!-- Secure form with CSRF token and Django form validation -->
-    <!-- CSRF token protects against Cross-Site Request Forgery attacks -->
+    <!-- Secure form with CSRF token -->
+    <!-- The CSRF token protects against Cross-Site Request Forgery attacks -->
     <form method="post">
         {% csrf_token %}
         
-        <!-- Display form errors if any -->
-        {% if form.non_field_errors %}
+        <!-- Display form errors -->
+        {% if form.errors %}
             <div class="errors">
-                {{ form.non_field_errors }}
+                <p>Please correct the errors below:</p>
+                {{ form.errors }}
             </div>
         {% endif %}
         
-        <!-- Use Django form fields for automatic validation and escaping -->
+        <!-- Django form fields automatically escape output and validate input -->
         <p>
             <label for="{{ form.title.id_for_label }}">{{ form.title.label }}:</label>
             {{ form.title }}
             {% if form.title.errors %}
                 <span class="error">{{ form.title.errors }}</span>
-            {% endif %}
-            {% if form.title.help_text %}
-                <small>{{ form.title.help_text }}</small>
             {% endif %}
         </p>
         
@@ -37,9 +42,6 @@
             {{ form.author }}
             {% if form.author.errors %}
                 <span class="error">{{ form.author.errors }}</span>
-            {% endif %}
-            {% if form.author.help_text %}
-                <small>{{ form.author.help_text }}</small>
             {% endif %}
         </p>
         
@@ -54,9 +56,16 @@
             {% endif %}
         </p>
         
-        <button type="submit">{{ action }}</button>
-        <a href="{% url 'bookshelf:book-list' %}">Cancel</a>
+        <button type="submit">Submit</button>
     </form>
+    
+    <h2>Security Features Demonstrated:</h2>
+    <ol>
+        <li><strong>CSRF Protection</strong>: The {% csrf_token %} tag generates a unique token that prevents CSRF attacks.</li>
+        <li><strong>Input Validation</strong>: Django forms validate all input before processing.</li>
+        <li><strong>Auto-Escaping</strong>: All template output is automatically escaped to prevent XSS.</li>
+        <li><strong>SQL Injection Prevention</strong>: Django ORM uses parameterized queries.</li>
+    </ol>
 </body>
 </html>
 
