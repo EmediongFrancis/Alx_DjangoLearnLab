@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from django.views.generic import DetailView
 
 from .models import Book, Library
@@ -7,20 +7,10 @@ from .models import Book, Library
 def book_list_view(request):
     """
     Function-based view that lists all books available in the database.
-    Returns a plain text response containing each book title and author.
+    Renders a simple text list of book titles and their authors.
     """
-    books = Book.objects.select_related("author").all()
-
-    if not books.exists():
-        content = "No books available."
-    else:
-        lines = [
-            f"{book.title} by {book.author.name if book.author else 'Unknown Author'}"
-            for book in books
-        ]
-        content = "\n".join(lines)
-
-    return HttpResponse(content, content_type="text/plain")
+    books = Book.objects.all()
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 
 class LibraryDetailView(DetailView):
