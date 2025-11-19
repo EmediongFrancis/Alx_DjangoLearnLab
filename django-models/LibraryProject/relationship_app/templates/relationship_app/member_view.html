@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Member View</title>
+</head>
+<body>
+    <h1>Member Dashboard</h1>
+    <p>Welcome, {{ user.username }}! You have Member access.</p>
+    <p>This view is only accessible to users with the Member role.</p>
+    
+    <h2>Member Functions</h2>
+    <ul>
+        <li>Browse available books</li>
+        <li>Request book loans</li>
+        <li>View your borrowing history</li>
+        <li>Manage your account</li>
+    </ul>
+    
+    <nav>
+        <a href="{% url 'relationship_app:book-list' %}">View Books</a> |
+        <a href="{% url 'relationship_app:logout' %}">Logout</a>
+    </nav>
+</body>
+</html>
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin View</title>
+</head>
+<body>
+    <h1>Admin Dashboard</h1>
+    <p>Welcome, {{ user.username }}! You have Admin access.</p>
+    <p>This view is only accessible to users with the Admin role.</p>
+    
+    <h2>Admin Functions</h2>
+    <ul>
+        <li>Manage all users and their roles</li>
+        <li>Access all library resources</li>
+        <li>System administration tasks</li>
+        <li>Full system control</li>
+    </ul>
+    
+    <nav>
+        <a href="{% url 'relationship_app:book-list' %}">View Books</a> |
+        <a href="{% url 'relationship_app:logout' %}">Logout</a>
+    </nav>
+</body>
+</html>
+

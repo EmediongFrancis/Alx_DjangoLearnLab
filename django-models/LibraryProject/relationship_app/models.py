@@ -1,4 +1,7 @@
+from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Author(models.Model):
@@ -66,3 +69,47 @@ class Librarian(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.library.name}"
+
+
+class UserProfile(models.Model):
+    """Model extending User with role-based access control."""
+    ROLE_CHOICES = [
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    ]
+    
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile'
+    )
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default='Member'
+    )
+
+    class Meta:
+        verbose_name = "User Profile"
+        verbose_name_plural = "User Profiles"
+        ordering = ['user__username']
+
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """Signal to automatically create UserProfile when a User is created."""
+    if created:
+        UserProfile.objects.create(user=instance, role='Member')
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """Signal to save UserProfile when User is saved."""
+    if hasattr(instance, 'profile'):
+        instance.profile.save()
+    else:
+        UserProfile.objects.create(user=instance, role='Member')
