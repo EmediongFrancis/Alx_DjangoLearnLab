@@ -73,10 +73,22 @@ class CustomUser(AbstractUser):
 
 
 class Book(models.Model):
+    """Book model with custom permissions for access control."""
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
     publication_year = models.IntegerField()
     
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+        ordering = ['title']
+        # Custom permissions for access control
+        permissions = (
+            ("can_view", "Can view book records"),
+            ("can_create", "Can create book records"),
+            ("can_edit", "Can edit book records"),
+            ("can_delete", "Can delete book records"),
+        )
 
     def __str__(self):
         return f"{self.title} by {self.author}"
