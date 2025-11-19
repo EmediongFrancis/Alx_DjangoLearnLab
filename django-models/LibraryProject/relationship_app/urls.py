@@ -7,9 +7,9 @@ app_name = "relationship_app"
 
 urlpatterns = [
     path("books/", views.list_books, name="book-list"),
-    path("books/add/", views.add_book, name="book-add"),
-    path("books/<int:pk>/edit/", views.edit_book, name="book-edit"),
-    path("books/<int:pk>/delete/", views.delete_book, name="book-delete"),
+    path("add_book/", views.add_book, name="book-add"),
+    path("edit_book/<int:pk>/", views.edit_book, name="book-edit"),
+    path("delete_book/<int:pk>/", views.delete_book, name="book-delete"),
     path("libraries/<int:pk>/", views.LibraryDetailView.as_view(), name="library-detail"),
     # Authentication URLs
     path("login/", LoginView.as_view(template_name="relationship_app/login.html", redirect_authenticated_user=True), name="login"),
