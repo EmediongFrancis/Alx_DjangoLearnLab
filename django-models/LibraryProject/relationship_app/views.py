@@ -1,12 +1,21 @@
+from django import forms
 from django.contrib.auth import login
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic.detail import DetailView
 
 from .models import Book
 from .models import Library
 from .models import UserProfile
+
+
+class BookForm(forms.ModelForm):
+    """Form for creating and updating Book instances."""
+
+    class Meta:
+        model = Book
+        fields = ["title", "author", "publication_year"]
 
 
 def list_books(request):
@@ -88,3 +97,47 @@ def librarian_view(request):
 def member_view(request):
     """Member-only view accessible only to users with Member role."""
     return render(request, 'relationship_app/member_view.html')
+
+
+# Permission-based CRUD views for Book
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    """View to add a new Book instance. Restricted by custom permission."""
+    form = BookForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('relationship_app:book-list')
+    return render(
+        request,
+        'relationship_app/book_form.html',
+        {'form': form, 'action': 'Add Book'}
+    )
+
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, pk):
+    """View to edit an existing Book instance. Restricted by custom permission."""
+    book = get_object_or_404(Book, pk=pk)
+    form = BookForm(request.POST or None, instance=book)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        return redirect('relationship_app:book-list')
+    return render(
+        request,
+        'relationship_app/book_form.html',
+        {'form': form, 'action': 'Edit Book', 'book': book}
+    )
+
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, pk):
+    """View to delete an existing Book instance. Restricted by custom permission."""
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('relationship_app:book-list')
+    return render(
+        request,
+        'relationship_app/book_confirm_delete.html',
+        {'book': book}
+    )

@@ -30,6 +30,11 @@ class Book(models.Model):
         verbose_name = "Book"
         verbose_name_plural = "Books"
         ordering = ['title']
+        permissions = (
+            ("can_add_book", "Can add book records"),
+            ("can_change_book", "Can edit book records"),
+            ("can_delete_book", "Can delete book records"),
+        )
 
     def __str__(self):
         return f"{self.title} by {self.author.name}"
