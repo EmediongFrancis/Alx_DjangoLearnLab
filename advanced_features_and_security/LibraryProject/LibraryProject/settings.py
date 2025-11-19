@@ -122,7 +122,7 @@ STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = 'relationship_app:book-list'
 
 # Custom User Model
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 # Media files (for user uploads like profile photos)
 MEDIA_URL = '/media/'
