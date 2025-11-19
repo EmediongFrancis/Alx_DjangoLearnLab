@@ -9,14 +9,7 @@ urlpatterns = [
     path("books/", views.list_books, name="book-list"),
     path("libraries/<int:pk>/", views.LibraryDetailView.as_view(), name="library-detail"),
     # Authentication URLs
-    path(
-        "login/",
-        LoginView.as_view(
-            template_name="relationship_app/login.html",
-            redirect_authenticated_user=True,
-        ),
-        name="login",
-    ),
+    path("login/", LoginView.as_view(template_name="relationship_app/login.html", redirect_authenticated_user=True), name="login"),
     path(
         "logout/",
         LogoutView.as_view(template_name="relationship_app/logout.html"),
