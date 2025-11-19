@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Librarian View</title>
+</head>
+<body>
+    <h1>Librarian Dashboard</h1>
+    <p>Welcome, {{ user.username }}! You have Librarian access.</p>
+    <p>This view is only accessible to users with the Librarian role.</p>
+    
+    <h2>Librarian Functions</h2>
+    <ul>
+        <li>Manage library books and catalog</li>
+        <li>Assist members with book requests</li>
+        <li>Track book availability</li>
+        <li>Manage library inventory</li>
+    </ul>
+    
+    <nav>
+        <a href="{% url 'relationship_app:book-list' %}">View Books</a> |
+        <a href="{% url 'relationship_app:logout' %}">Logout</a>
+    </nav>
+</body>
+</html>
+
