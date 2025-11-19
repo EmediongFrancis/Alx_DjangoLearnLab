@@ -5,7 +5,7 @@ from .models import Book
 from .models import Library
 
 
-def book_list_view(request):
+def list_books(request):
     """
     Function-based view that lists all books available in the database.
     Renders a simple text list of book titles and their authors.
