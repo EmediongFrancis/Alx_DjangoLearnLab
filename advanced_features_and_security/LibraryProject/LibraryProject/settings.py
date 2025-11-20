@@ -184,3 +184,9 @@ SECURE_CSP_FONT_SRC = "'self'"
 
 # SSL Redirect - only enable in production
 # SECURE_SSL_REDIRECT = True
+
+# Proxy SSL Header
+# When the app is behind a proxy/load balancer (e.g., Heroku, AWS ELB),
+# this tells Django to trust the X-Forwarded-Proto header so it can
+# determine if the original request was made via HTTPS.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
