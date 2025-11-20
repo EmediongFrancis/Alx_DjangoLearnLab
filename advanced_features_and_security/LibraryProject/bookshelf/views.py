@@ -11,7 +11,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.html import escape
 
-from .forms import BookForm, BookSearchForm, ExampleForm
+from .forms import ExampleForm
+from .forms import BookForm, BookSearchForm
 from .models import Book
 
 
