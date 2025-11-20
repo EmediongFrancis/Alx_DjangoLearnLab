@@ -142,3 +142,45 @@ class BookSearchForm(forms.Form):
             query = query.strip()[:200]
         return query
 
+
+class ExampleForm(forms.Form):
+    """
+    Example form demonstrating secure input handling and validation.
+    """
+
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        label='Name',
+        widget=forms.TextInput(attrs={'placeholder': 'Your full name'}),
+        help_text='Enter your full name (required).'
+    )
+    email = forms.EmailField(
+        required=True,
+        label='Email',
+        widget=forms.EmailInput(attrs={'placeholder': 'you@example.com'}),
+        help_text='We will never share your email.'
+    )
+    message = forms.CharField(
+        required=False,
+        label='Message',
+        widget=forms.Textarea(attrs={'rows': 4, 'placeholder': 'Optional message'}),
+        help_text='Optional: add any notes or questions.'
+    )
+
+    def clean_name(self):
+        """
+        Sanitize and validate the name field.
+        """
+        name = self.cleaned_data.get('name', '').strip()
+        if len(name) < 2:
+            raise ValidationError('Name must be at least 2 characters long.')
+        return name
+
+    def clean_message(self):
+        """
+        Sanitize the optional message field.
+        """
+        message = self.cleaned_data.get('message', '')
+        # Strip leading/trailing whitespace to prevent accidental spaces
+        return message.strip()
