@@ -1,9 +1,9 @@
-from rest_framework.generics import ListAPIView
+from rest_framework import generics
 from .models import Book
 from .serializers import BookSerializer
 
 
-class BookList(ListAPIView):
+class BookList(generics.ListAPIView):
     """
     API view to list all books.
     Returns a JSON response containing all book records.
